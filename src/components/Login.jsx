@@ -1,6 +1,7 @@
 // src/pages/Home.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '../context/authContext.jsx';
 
 export default function Home() {
   const navbarHeight = "60px";
@@ -11,6 +12,35 @@ export default function Home() {
     const timer = setTimeout(() => setShowLogin(true), 2000);
     return () => clearTimeout(timer);
   }, []);
+
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  });
+  const [error, setError] = useState('');
+  const { login } = useAuth();
+ 
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    try {
+      await login(formData.username, formData.password);
+      navigate('/');
+    } catch (err) {
+      setError(err.message || 'Login failed. Please try again.');
+    }
+  };
+
+  
 
   return (
     <div
@@ -25,7 +55,7 @@ export default function Home() {
         className="fixed top-0 inset-x-0 bg-gray-100 flex items-center justify-between px-6 shadow z-20"
       >
         <h2 className="font-extrabold text-yellow-600 tracking-wide text-lg">
-          Atlacis Food Hub
+          Atlancis Food Hub
         </h2>
       </header>
 
@@ -34,7 +64,7 @@ export default function Home() {
         {/* Yellow Side */}
         <div className="w-1/2 flex flex-col justify-start pl-12 pt-24">
           <h1 className="text-6xl font-extrabold leading-tight drop-shadow text-gray-900 tracking-tight">
-            Atlacis <br /> Food Hub.
+            Atlancis <br /> Food Hub.
           </h1>
         </div>
 
@@ -60,16 +90,25 @@ export default function Home() {
               <h2 className="text-2xl font-extrabold text-center text-yellow-700 mb-6">
                 Welcome Back
               </h2>
-              <form className="space-y-4">
+              {error && <div className="error-message">{error}</div>}
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <input
-                  type="email"
-                  placeholder="Email"
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  placeholder="Username"
+                  onChange={handleChange}
                   className="w-full px-4 py-2 border border-yellow-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  required
                 />
                 <input
                   type="password"
+                  name="password"
+                  value={formData.password}
                   placeholder="Password"
+                  onChange={handleChange}
                   className="w-full px-4 py-2 border border-yellow-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  required
                 />
                 <button
                   type="submit"
@@ -82,9 +121,15 @@ export default function Home() {
                 Don’t have an account?{" "}
                 <span
                   onClick={() => navigate("/signup")}
-                  className="font-semibold text-yellow-700 underline cursor-pointer hover:text-yellow-900"
+                  className="font-semibold text-yellow-700 cursor-pointer hover:text-yellow-900"
                 >
                   Sign up
+                </span><br></br>
+                <span
+                  onClick={() => navigate("/PasswordResetRequest")}
+                  className="font-semibold text-yellow-700 cursor-pointer hover:text-yellow-900"
+                >
+                  Forgot password?
                 </span>
               </p>
             </div>

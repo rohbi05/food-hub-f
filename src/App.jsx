@@ -20,7 +20,7 @@ function App() {
         <Route path="/dashboard/retailer" element={<RetailerDashboard />} />
         <Route path="/dashboard/customer" element={<CustomerDashboard />} />
         <Route path="/PasswordResetRequest" element={<PasswordResetRequest />} />
-        <Route path="/PasswordResetConfirm/:uid/:token" element={<PasswordResetConfirm />} />
+        <Route path="/PasswordResetConfirm/:uid/:token/" element={<PasswordResetConfirm />} />
       </Routes>
     </Router>
   )

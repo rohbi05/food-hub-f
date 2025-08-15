@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from '../context/authContext.jsx';
 
 function Signup() {
   const navigate = useNavigate();
@@ -10,25 +11,38 @@ function Signup() {
     confirmPassword: "",
     role: "customer"
   });
-
+  const [error, setError] = useState("");
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
-
-  const handleSubmit = (e) => {
+  const { signup } = useAuth();
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match.");
       return;
     }
 
     console.log("Signup submitted:", formData);
-
-    if (formData.role === "retailer") {
-      navigate("/retailer-dashboard");
-    } else {
-      navigate("/customer-dashboard");
+    try {
+      await signup(
+        formData.username,
+        formData.email,
+        formData.password,
+        formData.role
+      );
+      if (formData.role === "retailer") {
+        navigate("/dashboard/retailer");
+      } else {
+        navigate("/dashboard/customer");
+      }
+      } catch (err) {
+      setError(err.message || 'Registration failed. Please try again.');
     }
   };
 
@@ -112,16 +126,16 @@ function Signup() {
 
         <p className="text-center text-sm text-yellow-700 mt-4">
           Already have an account?{" "}
-          <Link to="/login" className="font-semibold underline hover:text-yellow-900">
+          <Link to="/login" className="font-semibold hover:text-yellow-900">
             Log in
           </Link>
         </p>
 
-        <p className="text-center text-xs text-yellow-600 mt-2">
-          <Link to="/forgot-password" className="hover:underline">
+        {/* <p className="text-center text-xs text-yellow-600 mt-2">
+          <Link to="//PasswordResetRequest" className="hover:underline">
             Forgot Password?
           </Link>
-        </p>
+        </p> */}
       </div>
     </div>
   );

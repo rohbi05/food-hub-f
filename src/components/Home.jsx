@@ -25,7 +25,7 @@ export default function Home() {
         className="fixed top-0 inset-x-0 bg-gray-100 flex items-center justify-between px-6 shadow z-20"
       >
         <h2 className="font-extrabold text-yellow-600 tracking-wide text-lg">
-          Atlacis Food Hub
+          Atlancis Food Hub
         </h2>
       </header>
 
@@ -34,7 +34,7 @@ export default function Home() {
         {/* Yellow Side */}
         <div className="w-1/2 flex flex-col justify-start pl-12 pt-24">
           <h1 className="text-6xl font-extrabold leading-tight drop-shadow text-gray-900 tracking-tight">
-            Atlacis <br /> Food Hub.
+            Atlancis <br /> Food Hub.
           </h1>
         </div>
 
@@ -62,8 +62,8 @@ export default function Home() {
               </h2>
               <form className="space-y-4">
                 <input
-                  type="email"
-                  placeholder="Email"
+                  type="text"
+                  placeholder="Username"
                   className="w-full px-4 py-2 border border-yellow-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
                 />
                 <input

@@ -37,12 +37,12 @@ const CustomerDashboard = () => {
     <div
       className="min-h-screen flex relative"
       style={{
-        background: customer 
-          ? "#fefce8" 
-          : "linear-gradient(to right, #facc15 50%, white 50%)",
+        // background: customer 
+        //   ? "#fefce8" 
+        //   : "linear-gradient(to right, #facc15 50%, white 50%)",
       }}
     >
-      {!customer && (
+      {/* {!customer && (
         <div className="w-1/2 hidden md:block relative">
           <div className="absolute inset-0 backdrop-blur-sm bg-black/10 z-10"></div>
           <img
@@ -51,26 +51,37 @@ const CustomerDashboard = () => {
             className="w-full h-full object-cover"
           />
         </div>
-      )}
+      )} */}
 
       <div className="flex-1 p-6 overflow-auto">
         <TopBar customer={customer} setView={setView} />
+        {view === 'dashboard' && (
+        <div className="mb-4 flex justify-end">
+          <button 
+            onClick={handleCheckout}
+            className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+          >
+            Checkout ({cart.length})
+          </button>
+        </div>
+      )}
+        
 
         {/* Views */}
-        {!customer && view === 'dashboard' && (
+        {/* {!customer && view === 'dashboard' && (
           <CustomerForm 
             formData={formData}
             setCustomer={setCustomer}
             handleChange={handleChange}
           />
-        )}
+        )}  */}
 
-        {customer && view === 'dashboard' && (
+        {view === 'dashboard' && (
           <MenuGrid 
             menu={sampleMenu} 
             addToCart={addToCart} 
             cartCount={cart.length} 
-            handleCheckout={handleCheckout} 
+            //handleCheckout={handleCheckout} 
           />
         )}
 

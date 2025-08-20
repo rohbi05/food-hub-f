@@ -1,5 +1,5 @@
 import React from "react";
-import {useState, useEffect, createContext, useContext} from React
+import {useState, useEffect, createContext, useContext} from "react";
 import RetailerService from "../api/services/retailer";
 import { useAuth } from "../context/authContext"
 
@@ -14,8 +14,10 @@ export const RetailerProvider = ({children}) =>{
         const fetchRetailerProfile = async () => {
             if (user && user.role === 'retailer') {
                 try {
-                    const profile = await RetailerService.getRetailerProfile(user.id);
+                    const id = localStorage.getItem('retailerID')
+                    const profile = await RetailerService.getRetailerById(id);
                     setRetailerProfile(profile);
+                    return profile;
                 } catch (error) {
                     console.error("Failed to fetch retailer profile:", error);
                 }
@@ -28,6 +30,10 @@ export const RetailerProvider = ({children}) =>{
         try {
             const profile = await RetailerService.createRetailer(profileData);
             setRetailerProfile(profile);
+            // localStorage.setItem('retailerID', profile.data.id)
+            console.log(localStorage.getItem('retailerID'))
+            const token = localStorage.getItem('accessToken')
+            console.log(token)
             return profile;
         } catch (error) {
             console.error("Failed to create retailer profile:", error);
@@ -36,7 +42,8 @@ export const RetailerProvider = ({children}) =>{
     };
     const updateRetailerProfile = async (profileData) => {
         try {
-            const updatedProfile = await RetailerService.updateRetailer(user.id, profileData);
+            const id = localStorage.getItem('retailerID')
+            const updatedProfile = await RetailerService.updateRetailer(id, profileData);
             setRetailerProfile(updatedProfile);
             return updatedProfile;
         } catch (error) {
@@ -45,7 +52,7 @@ export const RetailerProvider = ({children}) =>{
         }
     };
     return (
-        <RetailerContext.Provider value={{ retailerProfile, loading, createRetailerProfile, updateRetailerProfile }}>
+        <RetailerContext.Provider value={{ retailerProfile, loading, createRetailerProfile, updateRetailerProfile, setRetailerProfile }}>
             {children}
         </RetailerContext.Provider>
     );

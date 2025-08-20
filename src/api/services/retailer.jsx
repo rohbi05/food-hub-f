@@ -3,6 +3,8 @@ import api from '../axios';
     const RetailerService = {
         async createRetailer (profileData){
         try {
+            const token = localStorage.getItem('accessToken');
+            console.log(token);
             const formData = new FormData();
             formData.append('restaurant_name', profileData.restaurant_name);
             formData.append('restaurant_image', profileData.restaurant_image);
@@ -13,8 +15,11 @@ import api from '../axios';
             formData.append('document_food_hygiene', profileData.document_food_hygiene);
             const response = await api.post("/retailer-profile-create/", formData, {
                 headers: {
+                    Authorization:`Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
                 }});
+            localStorage.setItem('retailerID', response.data.id)
+            console.log(localStorage.getItem('retailerID'))
             return response.data;
         } catch (error) {
             console.error("Create retailer failed:", error);
@@ -32,14 +37,14 @@ import api from '../axios';
     },
     async getRetailerById (id) {
         try {
-            const response = await api.get(`/retailer-profiles/${id}/`);
+            const response = await api.get(`/retailer-profile-update/${id}/`);
             return response.data;
         } catch (error) {
             console.error("Get retailer by ID failed:", error);
             throw error;
         }
    },
-    async updateRetailer (token, profileData) {
+    async updateRetailer (id, profileData) {
         try {
             const formData = new FormData();
            
@@ -52,7 +57,7 @@ import api from '../axios';
                 formData.append(key, profileData[key]);
             }
             }
-            const response = await api.patch(`retailer-profile-update/`, formData);
+            const response = await api.patch(`retailer-profile-update/${id}/`, formData);
             return response.data;
         } catch (error) {
             console.error("Update retailer failed:", error);

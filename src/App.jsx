@@ -1,8 +1,9 @@
 // src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from './components/Home'
+import Signup from './components/Signup';
 import Login from "./components/Login";
-import Signup from "./components/Signup";
+// import Landing from "./components/Signuppast";
 import RetailerDashboard from "./components/RetailerDashboard";
 import CustomerDashboard from "./components/CustomerDashboard";
 import PasswordResetRequest from "./components/PasswordReset";
@@ -14,7 +15,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} /> {/* This routes to home */}
+        <Route path="/" element={<Home />} /> {/* This routes to home */}
+        <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard/retailer" element={<RetailerDashboard />} />

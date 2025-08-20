@@ -10,6 +10,9 @@ const Authservice = {
                 password,
                 role
             });
+            localStorage.setItem('accessToken', response.data.access);
+            const token = localStorage.getItem('accessToken');
+            console.log(token);
             return response.data;
             } catch (error) {
             console.error("Registration failed:", error);
@@ -22,6 +25,7 @@ const Authservice = {
                 username,
                 password
             });
+            console.log("Login response:", response.data);
             return response.data;
         } catch (error) {
             console.error("Login failed:", error);

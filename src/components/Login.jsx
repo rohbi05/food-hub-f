@@ -9,7 +9,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowLogin(true), 2000);
+    const timer = setTimeout(() => setShowLogin(true), 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -33,8 +33,14 @@ export default function Home() {
     setError('');
 
     try {
-      await login(formData.username, formData.password);
-      navigate('/');
+      const response = await login(formData.username, formData.password);
+      console.log("Login successful:", response);
+      if (response.user.role === 'retailer') {
+      navigate('/dashboard/retailer');
+      }
+      else if (response.user.role === 'customer') {
+        navigate('/dashboard/customer');
+      }
     } catch (err) {
       setError(err.message || 'Login failed. Please try again.');
     }

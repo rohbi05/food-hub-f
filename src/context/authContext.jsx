@@ -21,8 +21,9 @@ export const AuthProvider = ({ children }) => {
             const response = await Authservice.login(username, password);
             setUser(response.user);
             localStorage.setItem('user', JSON.stringify(response.user));
-            localStorage.setItem('accessToken', response.accessToken);
-            localStorage.setItem('refreshToken', response.refreshToken);
+            localStorage.setItem('accessToken', response.access);
+            localStorage.setItem('refreshToken', response.refresh);
+            return response;
         } catch (error) {
             console.error("Login failed:", error);
             throw error;
@@ -34,8 +35,8 @@ export const AuthProvider = ({ children }) => {
             const response = await Authservice.register(username, email, password,role);
             setUser(response.user);
             localStorage.setItem('user', JSON.stringify(response.user));
-            localStorage.setItem('accessToken', response.accessToken);
-            localStorage.setItem('refreshToken', response.refreshToken);
+            localStorage.setItem('accessToken', response.access);
+            localStorage.setItem('refreshToken', response.refresh);
             return response;
         } catch (error){
             console.error('Registration failed');

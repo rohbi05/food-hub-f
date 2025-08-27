@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../context/authContext.jsx';
+import { useCart } from '../context/cartContext.jsx'
+import CartService from "../api/services/cart.jsx";
 
 export default function Home() {
   const navbarHeight = "60px";
@@ -19,6 +21,7 @@ export default function Home() {
   });
   const [error, setError] = useState('');
   const { login } = useAuth();
+  const { setCart } = useCart();
  
 
   const handleChange = (e) => {
@@ -39,6 +42,8 @@ export default function Home() {
       navigate('/dashboard/retailer');
       }
       else if (response.user.role === 'customer') {
+        const cart = await CartService.CreateCart();
+        setCart(cart);
         navigate('/dashboard/customer');
       }
     } catch (err) {

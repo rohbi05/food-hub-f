@@ -1,22 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState,  useEffect } from 'react';
 import TopBar from './TopBar';
-import CustomerForm from './CustomerForm';
 import MenuGrid from './MenuGrid';
 import ProfileForm from './ProfileForm';
 import CheckoutView from './CheckoutView';
+import { useMenu } from '../context/menuContext';
+import { useCart } from '../context/cartContext';
+
 
 const CustomerDashboard = () => {
   const [customer, setCustomer] = useState(null);
   const [view, setView] = useState('dashboard');
-  const [cart, setCart] = useState([]);
-  const [formData, setFormData] = useState({ name: '', phone: '', email: '', image: null });
+  const {cart, setCart, createCart, addCartItem, updateCartItem, deleteCartItem, checkout } = useCart();
+  const { fetchMenuItems, menuItems, setMenuItems } = useMenu();
 
-  const sampleMenu = [
-    { id: 1, name: 'Burger', price: 350, img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=800&q=80' },
-    { id: 2, name: 'Pizza', price: 800, img: 'https://images.unsplash.com/photo-1601924638867-3ec2ef8da8a5?w=800&q=80' },
-    { id: 3, name: 'Chips', price: 200, img: 'https://images.unsplash.com/photo-1585238342020-96629a248dd0?w=800&q=80' },
-    { id: 4, name: 'Salad', price: 300, img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80' },
-  ];
+  // useEffect(() => {
+  //     const loadMenu = async () => {
+  //       const data = await fetchMenuItems();
+  //       if (data) setMenu(data);
+  //     };
+  //     loadMenu();
+  // }, []);
+
+  useEffect(() => {
+    const loadMenuAndCart = async () => {
+      const data = await fetchMenuItems();
+      if (data) setMenuItems(data);
+
+      // Ensure a cart exists
+      if (!cart) {
+        await createCart(); // this will create and set the cart in context
+      }
+    };
+    loadMenuAndCart();
+  }, []);
+
+
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -26,13 +44,30 @@ const CustomerDashboard = () => {
     }));
   };
 
-  const addToCart = (item) => setCart(prev => [...prev, item]);
-
-  const handleCheckout = () => {
-    if (cart.length === 0) return alert("Your cart is empty!");
-    setView("checkout");
+  const addToCart = async (item) => {
+      try {
+        await addCartItem(item.id);
+      } catch (err) {
+        console.error("Failed to add to cart:", err);
+        alert("Could not add item to cart");
+      }
   };
 
+
+  const handleCheckout = async () => {
+    if (!cart || !cart.items || cart.items.length === 0) {
+      return alert("Your cart is empty!");
+    }
+
+    try {
+      const order = await checkout(); // calls CartService.CheckOut and clears cart
+      setView("checkout");
+      // Optionally pass the order info to CheckoutView if you want to show order summary
+    } catch (err) {
+      console.error("Checkout failed:", err);
+      alert("Could not checkout");
+    }
+  };
   return (
     <div
       className="min-h-screen flex relative"
@@ -61,7 +96,7 @@ const CustomerDashboard = () => {
             onClick={handleCheckout}
             className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
           >
-            Checkout ({cart.length})
+            count={cart?.items?.length || 0}
           </button>
         </div>
       )}
@@ -78,9 +113,9 @@ const CustomerDashboard = () => {
 
         {view === 'dashboard' && (
           <MenuGrid 
-            menu={sampleMenu} 
+            menu={menuItems} 
             addToCart={addToCart} 
-            cartCount={cart.length} 
+            // cartCount={c} 
             //handleCheckout={handleCheckout} 
           />
         )}

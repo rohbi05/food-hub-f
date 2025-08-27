@@ -170,7 +170,11 @@ function Signup() {
                   required
                   className="w-full p-3 rounded border"
                 />
-                <input type="file" name="image" onChange={handleChange} />
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">
+                    Profile image
+                  </label>
+                <input type="file" name="image" onChange={handleChange} /></div>
               </>
             )}
 
@@ -211,10 +215,24 @@ function Signup() {
                   placeholder="Business Email"
                   required
                   className="w-full p-3 rounded border"
-                />
+                /><div>
+                  <label className="block text-gray-700 font-medium mb-1">
+                    Restaurant image
+                  </label>
                 <input type="file" name="restaurant_image" onChange={handleChange} />
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">
+                    Document of good conduct
+                  </label>
                 <input type="file" name="document_good_conduct" onChange={handleChange} />
+                </div>
+                <div> 
+                  <label className="block text-gray-700 font-medium mb-1">
+                    Document of food hygiene
+                  </label>
                 <input type="file" name="document_food_hygiene" onChange={handleChange} />
+                </div>
               </>
             )}
 

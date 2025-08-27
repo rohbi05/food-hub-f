@@ -14,7 +14,7 @@ export const CustomerProvider = ({children}) =>{
             if (user && user.role === 'customer') {
                 try {
                     const id = localStorage.getItem('customerID')
-                    const profile = await CustomerService.getCustomer(id);
+                    const profile = await CustomerService.getCustomer();
                     setCustomerProfile(profile);
                     return profile;
                 } catch (error) {

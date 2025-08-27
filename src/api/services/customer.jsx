@@ -46,9 +46,9 @@ const CustomerService = {
             throw error;
         }
     },
-    async getCustomer(id){
+    async getCustomer(){
         try{
-            const response = await api.get(`/customer-profile-update/${id}/`);
+            const response = await api.get(`/customer-profile-update/`);
             return response.data;
         }catch(error){
             console.error("Unable to fetch customer:", error);

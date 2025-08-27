@@ -14,8 +14,8 @@ export const RetailerProvider = ({children}) =>{
         const fetchRetailerProfile = async () => {
             if (user && user.role === 'retailer') {
                 try {
-                    const id = localStorage.getItem('retailerID')
-                    const profile = await RetailerService.getRetailerById(id);
+                    //const id = localStorage.getItem('retailerID')
+                    const profile = await RetailerService.getRetailerById();
                     setRetailerProfile(profile);
                     return profile;
                 } catch (error) {
@@ -42,8 +42,8 @@ export const RetailerProvider = ({children}) =>{
     };
     const updateRetailerProfile = async (profileData) => {
         try {
-            const id = localStorage.getItem('retailerID')
-            const updatedProfile = await RetailerService.updateRetailer(id, profileData);
+            //const id = localStorage.getItem('retailerID')
+            const updatedProfile = await RetailerService.updateRetailer(profileData);
             setRetailerProfile(updatedProfile);
             return updatedProfile;
         } catch (error) {

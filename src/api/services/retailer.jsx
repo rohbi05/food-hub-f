@@ -35,16 +35,16 @@ import api from '../axios';
             throw error;
         }
     },
-    async getRetailerById (id) {
+    async getRetailerById () {
         try {
-            const response = await api.get(`/retailer-profile-update/${id}/`);
+            const response = await api.get(`/retailer-profile-update/`);
             return response.data;
         } catch (error) {
             console.error("Get retailer by ID failed:", error);
             throw error;
         }
    },
-    async updateRetailer (id, profileData) {
+    async updateRetailer ( profileData) {
         try {
             const formData = new FormData();
            
@@ -57,7 +57,7 @@ import api from '../axios';
                 formData.append(key, profileData[key]);
             }
             }
-            const response = await api.patch(`retailer-profile-update/${id}/`, formData);
+            const response = await api.patch(`retailer-profile-update/`, formData);
             return response.data;
         } catch (error) {
             console.error("Update retailer failed:", error);

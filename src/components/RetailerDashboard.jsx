@@ -22,7 +22,8 @@ const RetailerDashboard = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setMenuItems([...menuItems, newItem]);
-    setNewItem({ image: "", name: "", price: "", description: "" });
+    setNewItem({ image: "", name: "", price: "", description: "" });0
+  
   };
 
   const handleDelete = (index) => {

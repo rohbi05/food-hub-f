@@ -1,10 +1,17 @@
 // src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from './components/Home'
+import Signup from './components/Signup';
 import Login from "./components/Login";
-import Signup from "./components/Signup";
+// import Landing from "./components/Signuppast";
 import RetailerDashboard from "./components/RetailerDashboard";
+import DashboardHome from "./components/DashboardHome";
+import Menu from "./components/Menu";
+import Orders from "./components/Orders";
+import Profile from "./components/Profile";
 import CustomerDashboard from "./components/CustomerDashboard";
+import PasswordResetRequest from "./components/PasswordReset";
+import PasswordResetConfirm from "./components/PasswordResetConfirm";
 
 function App() {
 
@@ -13,10 +20,21 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} /> {/* This routes to home */}
+        <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard/retailer" element={<RetailerDashboard />} />
+        {/* <Route path="/dashboard/retailer" element={<RetailerDashboard />} /> */}
         <Route path="/dashboard/customer" element={<CustomerDashboard />} />
+        <Route path="/PasswordResetRequest" element={<PasswordResetRequest />} />
+        <Route path="/PasswordResetConfirm/:uid/:token/" element={<PasswordResetConfirm />} />
+
+        {/* Dashboard with nested routes */}
+        <Route path="/dashboard/retailer" element={<RetailerDashboard />}>
+          <Route index element={<DashboardHome />} />
+          <Route path="menu" element={<Menu />} />
+          <Route path="orders" element={<Orders />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
       </Routes>
     </Router>
   )

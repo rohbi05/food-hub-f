@@ -4,12 +4,12 @@ export default function CheckoutView({ cart, setView }) {
       <h2 className="text-xl font-bold mb-4">Your Cart</h2>
       {cart.map((item, idx) => (
         <div key={idx} className="flex justify-between border-b py-2">
-          <span>{item.name}</span>
-          <span>Ksh {item.price}</span>
+          <span>{item.name} x {item.quantity}</span>
+          <span>Ksh {item.price * item.quantity}</span>
         </div>
       ))}
       <div className="mt-4 font-bold">
-        Total: Ksh {cart.reduce((sum, item) => sum + item.price, 0)}
+        Total: Ksh {cart.reduce((sum, item) => sum + item.price * item.quantity, 0)}
       </div>
       <button
         onClick={() => alert("Checkout complete!")}

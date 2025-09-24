@@ -1,57 +1,58 @@
 // src/pages/Home.jsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from '../context/authContext.jsx';
-import { useCart } from '../context/cartContext.jsx'
+import { useAuth } from "../context/authContext.jsx";
+import { useCart } from "../context/cartContext.jsx";
 import CartService from "../api/services/cart.jsx";
 
 export default function Home() {
   const navbarHeight = "60px";
   const [showLogin, setShowLogin] = useState(false);
   const navigate = useNavigate();
+  const hasRun = useRef(false); // prevent StrictMode double effect
 
   useEffect(() => {
+    if (hasRun.current) return; // block second run in dev
+    hasRun.current = true;
+
     const timer = setTimeout(() => setShowLogin(true), 1000);
     return () => clearTimeout(timer);
   }, []);
 
   const [formData, setFormData] = useState({
-    username: '',
-    password: ''
+    username: "",
+    password: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const { login } = useAuth();
   const { setCart } = useCart();
- 
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
       const response = await login(formData.username, formData.password);
       console.log("Login successful:", response);
-      if (response.user.role === 'retailer') {
-      navigate('/dashboard/retailer');
-      }
-      else if (response.user.role === 'customer') {
+
+      if (response.user.role === "retailer") {
+        navigate("/dashboard/retailer");
+      } else if (response.user.role === "customer") {
         const cart = await CartService.CreateCart();
         setCart(cart);
-        navigate('/dashboard/customer');
+        navigate("/dashboard/customer");
       }
     } catch (err) {
-      setError(err.message || 'Login failed. Please try again.');
+      setError(err.message || "Login failed. Please try again.");
     }
   };
-
-  
 
   return (
     <div
@@ -92,7 +93,7 @@ export default function Home() {
       {/* ───── Login Overlay ───── */}
       {showLogin && (
         <>
-          {/* Dimmer (less blur) */}
+          {/* Dimmer */}
           <div className="fixed inset-0 bg-black/10 backdrop-blur-[2px] animate-fade-in z-30" />
 
           {/* Modal */}
@@ -101,7 +102,11 @@ export default function Home() {
               <h2 className="text-2xl font-extrabold text-center text-yellow-700 mb-6">
                 Welcome Back
               </h2>
-              {error && <div className="error-message">{error}</div>}
+              {error && (
+                <div className="mb-4 text-center text-red-600 font-semibold">
+                  {error}
+                </div>
+              )}
               <form onSubmit={handleSubmit} className="space-y-4">
                 <input
                   type="text"
@@ -135,7 +140,8 @@ export default function Home() {
                   className="font-semibold text-yellow-700 cursor-pointer hover:text-yellow-900"
                 >
                   Sign up
-                </span><br></br>
+                </span>
+                <br />
                 <span
                   onClick={() => navigate("/PasswordResetRequest")}
                   className="font-semibold text-yellow-700 cursor-pointer hover:text-yellow-900"
